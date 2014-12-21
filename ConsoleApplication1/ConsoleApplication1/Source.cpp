@@ -1,68 +1,95 @@
 #include <stdio.h>
+void writeORread();
 void writing();
 void reading();
 
 void main()
 {
-	int n;
+	writeORread();
+	system("pause");
+}
 
-	printf("Would you like to:\n 1.write in your diary\n 2.read from it?\n");
-	scanf("%d", &n);
 
-	if (n == 1)
+void writeORread()
+{
+	int choice;
+
+	printf("\nWelcome to your diary! Would you like to:\n\n1.write in your diary\n\n2.read from it?\n\n");
+	scanf("%d", &choice);
+
+	system("cls");
+
+	if (choice == 1)
 	{
 		writing();
 	}
 
-	else if (n == 2)
+	else if (choice == 2)
 	{
 		reading();
 	}
-
-	system("pause");
 }
 
-void writing()
+void enteringDate()
 {
-	char month, a;
-	int day, year;
-
 	FILE *diary;
 	diary = fopen("D:\\diary.txt", "a+");
 
-	printf("Day (ex.12): ");
+	int day, month, year;
+
+	printf("Day: ");
 	scanf("%d", &day);
 
-	printf("\nMonth (ex. December): ");
-	scanf(" %c", &month);
+	printf("\nMonth: ");
+	scanf("%d", &month);
 
 	printf("\nYear: ");
 	scanf("%d", &year);
 
-	printf("\n\nHow was your day? (Press w and enter to finish writing.)\n");
+	fprintf(diary, "\n\n%d.%d.%d.", day, month, year);
+}
 
+void writing()
+{
+	FILE *diary;
+	diary = fopen("D:\\diary.txt", "a+");	
+
+	enteringDate();
+	printf("\n\nHow was your day?\n");
+
+	char content;
 	while (1)
 	{
-		scanf(" %c", &a);
-		if (a == 'w')
+		scanf("%c", &content);
+		if (content == '0')		//Press 0 and enter to finish writing.
 			break;
-		fprintf(diary, "%c", a);
+		fprintf(diary, "%c", content);
 	}
 
 	fclose(diary);
 
 	printf("\nSeems like a great day!\n\n");
 
-}
+} //I have some problems here, it prints me first the content and then the date. It should be obrnuto.
 
 void reading()
 {
-	char a;
-
 	FILE *diary;
-	diary = fopen("D:\\diary.txt", "r");
-	fscanf(diary, " %c", &a);
-	printf("%c\n\n", a);
+	char *contents;
+	int fileSize = 0;
+
+	diary = fopen("D:\\diary.txt", "rb");
+
+
+	fseek(diary, 0L, SEEK_END);
+	fileSize = ftell(diary);
+	fseek(diary, 0L, SEEK_SET);
+
+	contents = malloc(fileSize + 1);
+
+	size_t size = fread(contents, 1, fileSize, diary);
+	contents[size] = 0; 
+	printf("%s\n", contents);
 
 	fclose(diary);
 }
