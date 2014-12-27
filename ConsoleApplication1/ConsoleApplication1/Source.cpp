@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#define SIZE 10
+#define SIZE 50
 void newUsernameAndPass();
 void checkUserAndPass();
 void writeORread();
@@ -20,7 +20,6 @@ void main()
 	else if (choice == 'N')
 		checkUserAndPass();
 
-	writeORread();
 
 	system("pause");
 }
@@ -78,14 +77,15 @@ void checkUserAndPass()
 	fscanf(pasword, "%s", &checkp);
 	fclose(pasword);
 
-	if (strcmp(usernam, checku) == 0 && strcmp(password, checkp) == 0) 
+	if (strcmp(usernam, checku) == 0 && strcmp(password, checkp) == 0)
 	{
 		printf("\n\n\t\tHello, %s!\n\n", usernam);
+		writeORread();
 	}
 
 	else //keep asking for the user and pass until it's correct!
 		printf("\n\nYour username or password is incorrect.Please check them again.\n\n");
-
+}
 void enteringDate()
 {
 	FILE *diary;
@@ -136,7 +136,6 @@ void reading()
 	int fileSize = 0;
 
 	diary = fopen("D:\\diary.txt", "rb");
-
 
 	fseek(diary, 0L, SEEK_END);
 	fileSize = ftell(diary);
